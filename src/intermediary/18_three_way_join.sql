@@ -381,28 +381,6 @@ FROM
     JOIN users ON comments.user_id = users.id
     AND photos.user_id = users.id;
 
--- url	contents	username
--- http://chet.net	Non est totam.	Frederique_Donnelly
--- https://kailyn.name	Fuga et iste beatae.	Alfredo66
--- http://chet.net	Nihil quo voluptatem placeat.	Frederique_Donnelly
--- https://alayna.net	Rerum dolor sunt sint.	Frederique_Donnelly
--- http://marjolaine.name	Culpa perferendis qui perferendis eligendi officia neque ex.	Reyna.Marvin
--- http://marjolaine.name	Enim doloremque delectus.	Reyna.Marvin
--- https://santina.net	Quia dolorem officia explicabo quae.	Alfredo66
--- https://santina.net	Tempora quas facere.	Alfredo66
--- http://chet.net	Rem autem corporis earum necessitatibus dolores explicabo iste quo.	Frederique_Donnelly
--- https://kailyn.name	Porro illum perferendis nemo libero voluptatibus vel.	Alfredo66
--- https://santina.net	Eum aut magni sint.	Alfredo66
--- https://santina.net	Vitae voluptatem voluptates vel nam.	Alfredo66
--- http://marjolaine.name	Aperiam sunt aliquam illum impedit.	Reyna.Marvin
--- http://marjolaine.name	Voluptates nihil voluptatum quia maiores dolorum molestias occaecati.	Reyna.Marvin
--- http://marjolaine.name	Fugit quia perferendis magni doloremque dicta officia dignissimos ut necessitatibus.	Reyna.Marvin
--- https://kailyn.name	Ad dignissimos quia aut commodi vel ut nisi.	Alfredo66
--- https://alayna.net	Ut nemo voluptas voluptatem voluptas.	Frederique_Donnelly
--- http://chet.net	Esse voluptatem sed deserunt ipsum eaque maxime rerum qui.	Frederique_Donnelly
--- https://kailyn.name	Illo atque nihil et quod consequatur neque pariatur delectus.	Alfredo66
--- https://kailyn.name	Debitis repellendus inventore omnis est facere aliquam.	Alfredo66
--- https://kailyn.name	Minima dolorem reiciendis excepturi culpa sapiente eos deserunt ut.	Alfredo66
 -- output:
 -- url                     | username            | contents
 -- ----------------------- | --------------------|-------------------

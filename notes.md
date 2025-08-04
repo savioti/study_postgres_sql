@@ -42,3 +42,7 @@ serial is a pseudo-type that simplifies the creation of auto-incrementing intege
 ## REFERENCES
 
 shorthand syntax to indicate a foreign key reference to another table's column
+
+## COUNT
+
+- The COUNT function does not count NULL values
