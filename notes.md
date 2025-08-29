@@ -46,3 +46,7 @@ shorthand syntax to indicate a foreign key reference to another table's column
 ## COUNT
 
 - The COUNT function does not count NULL values
+
+## Scalar Query
+
+- a SELECT query that returns a single value, often as the product of an aggregate function like COUNT, SUM, MIN, MAX or AVG
