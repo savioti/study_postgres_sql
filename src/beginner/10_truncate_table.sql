@@ -1,0 +1,14 @@
+-- Truncate table example
+-- The TRUNCATE TABLE command is a Data Definition Language
+-- (DDL) instruction that quickly clears all data from a
+-- table by marking its storage space for reuse. This process
+-- efficiently removes every record in the table, but keeps
+-- the table structure intact.
+--
+-- Unlike the DELETE statement, which removes rows one by one
+-- and can activate triggers or log each deletion, TRUNCATE
+-- TABLE operates without generating individual delete actions,
+-- resulting in less overhead for logging and locking.
+-- Integrity mechanisms such as triggers are usually bypassed
+-- during this operation.
+TRUNCATE TABLE photos;

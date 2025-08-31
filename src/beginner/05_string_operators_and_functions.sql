@@ -37,3 +37,37 @@ SELECT
     LENGTH(country) AS country_length
 FROM
     cities;
+
+-- Using the SUBSTRING function to extract a part of a string
+SELECT
+    name,
+    SUBSTRING(
+        name
+        FROM
+            1 FOR 3
+    ) AS city_name_abbreviation,
+    SUBSTRING(
+        country
+        FROM
+            1 FOR 3
+    ) AS country_abbreviation
+FROM
+    cities;
+
+-- Using the TRIM function to remove leading and trailing spaces
+SELECT
+    name,
+    TRIM(name) AS trimmed_name,
+    country,
+    TRIM(country) AS trimmed_country
+FROM
+    cities;
+
+-- Using the REPLACE function to replace occurrences of a substring
+SELECT
+    name,
+    REPLACE(name, 'a', '@') AS replaced_name,
+    country,
+    REPLACE(country, 'a', '@') AS replaced_country
+FROM
+    cities;

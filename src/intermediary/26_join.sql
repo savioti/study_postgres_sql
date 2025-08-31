@@ -370,6 +370,117 @@ VALUES
         3
     );
 
+-- for each comment, show the contents of the comment and the username of the user who made the comment
+SELECT
+    contents,
+    username
+FROM
+    comments
+    JOIN users ON users.id = comments.user_id;
+
+-- for each comment, list the contents of the comment and the url of the photo the comment was added to
+SELECT
+    contents,
+    url
+FROM
+    comments
+    JOIN photos ON photos.id = comments.photo_id;
+
+-- inner join example
+SELECT
+    url,
+    username
+FROM
+    photos
+    JOIN users ON users.id = photos.user_id;
+
+-- output:
+-- url                     | username
+-- ----------------------- | -------------------
+-- https://santina.net       | Alfredo66
+-- https://alayna.net        | Frederique_Donnelly
+-- https://kailyn.name       | Alfredo66
+---- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-- inner join example
+SELECT
+    url,
+    username
+FROM
+    photos
+    JOIN users ON users.id = photos.user_id;
+
+-- output:
+-- url                     | username
+-- ----------------------- | -------------------
+-- http://kolby.org	       | Reyna.Marvin
+-- http://marjolaine.name  | Reyna.Marvin
+-- http://colten.net	   | Micah.Cremin
+-- http://jerrold.org	   | Micah.Cremin
+-- https://kailyn.name	   | Alfredo66
+-- https://santina.net	   | Alfredo66
+---- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-- left join example
+SELECT
+    url,
+    username
+FROM
+    photos
+    LEFT JOIN users ON users.id = photos.user_id;
+
+-- output:
+-- url                     | username
+-- ----------------------- | -------------------
+-- https://santina.net     | Alfredo66
+-- https://kailyn.name     | Alfredo66
+-- http://marjolaine.name  | Reyna.Marvin
+-- http://jerrold.org      | Micah.Cremin
+-- http://colten.net       | Micah.Cremin
+-- http://kolby.org        | Reyna.Marvin
+-- http://default-1.org    | NULL
+-- http://default-2.org    | NULL
+---- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-- right join example
+SELECT
+    url,
+    username
+FROM
+    photos
+    RIGHT JOIN users ON users.id = photos.user_id;
+
+-- output:
+-- url                     | username
+-- ----------------------- | -------------------
+-- https://santina.net     | Alfredo66
+-- https://kailyn.name     | Alfredo66
+-- http://marjolaine.name  | Reyna.Marvin
+-- http://jerrold.org      | Micah.Cremin
+-- http://colten.net       | Micah.Cremin
+-- http://kolby.org        | Reyna.Marvin
+-- NULL                    | NewUser1
+-- NULL                    | NewUser2;
+---- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-- full join example
+SELECT
+    url,
+    username
+FROM
+    photos FULL
+    JOIN users ON users.id = photos.user_id;
+
+-- output:
+-- url                     | username
+-- ----------------------- | -------------------
+-- https://santina.net     | Alfredo66
+-- https://kailyn.name     | Alfredo66
+-- http://marjolaine.name  | Reyna.Marvin
+-- http://jerrold.org      | Micah.Cremin
+-- http://colten.net       | Micah.Cremin
+-- http://kolby.org        | Reyna.Marvin
+-- http://default-1.org    | NULL
+-- http://default-2.org    | NULL
+-- NULL                    | NewUser1
+-- NULL                    | NewUser2;
+---- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -- three-way join example
 SELECT
     url,
@@ -436,54 +547,77 @@ FROM
 --     +----+--------+-------------+---------+
 --     | 3  | 5      | 3           | 3       |
 --     +----+--------+-------------+---------+
-CREATE TABLE authors (
-    id serial PRIMARY KEY,
-    name varchar(100) NOT NULL
-);
-
-CREATE TABLE books (
-    id serial PRIMARY KEY,
-    title varchar(200) NOT NULL,
-    author_id integer REFERENCES authors(id) ON DELETE CASCADE
-);
-
-CREATE TABLE reviews (
-    id serial PRIMARY KEY,
-    rating integer NOT NULL CHECK (
-        rating >= 1
-        AND rating <= 5
-    ),
-    reviewer_id integer REFERENCES authors(id) ON DELETE CASCADE,
-    book_id integer REFERENCES books(id) ON DELETE CASCADE
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-- self join example
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    manager_id INT REFERENCES employees(id) ON DELETE
+    SET
+        NULL
 );
 
 INSERT INTO
-    authors (name)
+    employees (name, manager_id)
 VALUES
-    ('Stephen King'),
-    ('Agatha Christie'),
-    ('JK Rowling');
+    ('Alice', NULL),
+    ('Bob', 1),
+    ('Charlie', 1),
+    ('David', 2),
+    ('Eve', 2),
+    ('Frank', 3);
 
-INSERT INTO
-    books (title, author_id)
-VALUES
-    ('The Dark Tower', 1),
-    ('Affair At Styles', 2),
-    ('Chamber of Secrets', 3);
-
-INSERT INTO
-    reviews (rating, reviewer_id, book_id)
-VALUES
-    (3, 1, 2),
-    (4, 2, 1),
-    (5, 3, 3);
-
+-- for each employee, show the employee name and their manager's name
+-- looking for the manager in the same table
 SELECT
-    title,
-    name,
-    rating
+    e1.name AS employee,
+    e2.name AS manager
 FROM
-    reviews
-    JOIN books ON books.id = reviews.book_id
-    JOIN authors ON authors.id = books.author_id
-    AND books.author_id = authors.id;
+    employees e1
+    LEFT JOIN employees e2 ON e1.manager_id = e2.id;
+
+-- output:
+-- employee | manager
+-- -------- | ----------------
+-- Alice    | NULL
+-- Bob      | Alice
+-- Charlie  | Alice
+-- David    | Bob
+-- Eve      | Bob
+-- Frank    | Charlie
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-- CROSS JOIN example
+CREATE TABLE colors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20)
+);
+
+CREATE TABLE sizes (
+    id SERIAL PRIMARY KEY,
+    label VARCHAR(10)
+);
+
+INSERT INTO
+    colors (name)
+VALUES
+    ('Red'),
+    ('Blue'),
+    ('Green'),
+    ('Black');
+
+INSERT INTO
+    sizes (label)
+VALUES
+    ('S'),
+    ('M'),
+    ('L'),
+    ('XL');
+
+-- list all combinations of colors and sizes
+-- (every color with every size)
+SELECT
+    colors.name AS color,
+    sizes.label AS size
+FROM
+    colors
+    CROSS JOIN sizes;
