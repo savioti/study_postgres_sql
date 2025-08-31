@@ -92,3 +92,26 @@ WHERE
         WHERE
             name = 'S5620 Monte'
     );
+
+-- From-less Selects
+-- Using only subqueries, print the max price, min price, and average price of all phones.
+-- Rename each column to max_price, min_price, avg_price
+SELECT
+    (
+        SELECT
+            max(price)
+        FROM
+            phones
+    ) AS max_price,
+    (
+        SELECT
+            min(price)
+        FROM
+            phones
+    ) AS min_price,
+    (
+        SELECT
+            avg(price)
+        FROM
+            phones
+    ) AS avg_price;

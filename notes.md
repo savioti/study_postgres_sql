@@ -50,3 +50,8 @@ shorthand syntax to indicate a foreign key reference to another table's column
 ## Scalar Query
 
 - a SELECT query that returns a single value, often as the product of an aggregate function like COUNT, SUM, MIN, MAX or AVG
+
+## Subqueries
+
+- Always use an alias when using a subquery in a FROM
+- In most cases, a subquery should return a single column
