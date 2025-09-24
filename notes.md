@@ -55,3 +55,9 @@ shorthand syntax to indicate a foreign key reference to another table's column
 
 - Always use an alias when using a subquery in a FROM
 - In most cases, a subquery should return a single column
+
+## Indexing
+
+- Don't create more indices than you need, as indices are constantly updated
+- Avoid indexing large fields, like a html body
+- Run EXPLAIN ANALYZE to check if indexing is really needed
