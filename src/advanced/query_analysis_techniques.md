@@ -83,7 +83,7 @@ LOAD 'auto_explain';
 SET auto_explain.log_min_duration = '100ms';
 ```
 
-## Query Refactoring
+## Query Refactoring with CTE
 
 Complex queries that involve multiple joins or nested aggregations can often be simplified using CTEs (Common Table Expressions).
 
