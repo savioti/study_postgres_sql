@@ -90,6 +90,114 @@ For example: ```orders.user_id``` should be indexed when joining to ```users.id`
 
 ## Reducing Subqueries
 
+Reducing subqueries is an important SQL optimization strategy, especially when working with complex queries or large datasets.
+
+Subqueries — particularly *correlated subqueries* that run once for each row in the outer query — can severely impact performance.
+
+Replacing them with more efficient query structures such as joins, Common Table Expressions (CTEs), or temporary tables often leads to faster and more maintainable SQL code.
+
+### Avoid correlated subqueries
+
+```sql
+-- Inefficient: correlated subquery executed for each user
+SELECT
+    u.username,
+    (
+        SELECT COUNT(*)
+        FROM orders o
+        WHERE o.user_id = u.id
+    ) AS total_orders
+FROM users u;
+```
+
+A more efficient approach is to replace it with a join and aggregation:
+
+```sql
+-- Optimized version using a join
+SELECT
+    u.username,
+    COUNT(o.id) AS total_orders
+FROM
+    users u
+    LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY
+    u.username;
+```
+
+This approach computes all counts in one pass, instead of executing a subquery per row.
+
+### Replace repeated subqueries with CTEs
+
+When the same subquery logic is used multiple times within a query, consider refactoring it into a Common Table Expression (CTE).
+
+CTEs improve readability and can reduce redundant computation.
+
+```sql
+-- Using CTE to reuse filtered results
+WITH completed_orders AS (
+    SELECT user_id
+    FROM orders
+    WHERE status = 'completed'
+)
+SELECT
+    u.username,
+    COUNT(c.user_id) AS total_completed_orders
+FROM
+    users u
+    JOIN completed_orders c ON u.id = c.user_id
+GROUP BY
+    u.username;
+```
+
+Here, the filtered result set (completed_orders) is generated once and reused, avoiding multiple scans of the orders table.
+
+### Limit data in subqueries
+
+If a subquery is necessary, always restrict the data it returns using filters, limits, or aggregates.
+
+Returning only the relevant columns and rows minimizes the workload during query execution.
+
+```sql
+-- Subquery returns only needed columns and rows
+SELECT *
+FROM users
+WHERE id IN (
+    SELECT user_id
+    FROM orders
+    WHERE status = 'completed'
+    LIMIT 100
+);
+```
+
+This approach reduces the data volume processed in the outer query.
+
+### Use temporary or materialized tables for heavy subqueries
+
+For particularly expensive subqueries — especially those reused across multiple queries — it may be more efficient to store results in a temporary or materialized table.
+
+This allows the database to avoid recalculating the same results repeatedly.
+
+```sql
+-- Materialize results for reuse
+CREATE TEMP TABLE high_value_orders AS
+SELECT user_id, SUM(total) AS total_spent
+FROM orders
+GROUP BY user_id
+HAVING SUM(total) > 1000;
+
+SELECT u.username, h.total_spent
+FROM users u
+JOIN high_value_orders h ON u.id = h.user_id;
+```
+
+### Summary & best practices
+
+- Avoid correlated subqueries whenever possible — use joins or aggregations instead.
+- Use CTEs to organize and reuse logic cleanly.
+- Restrict the data returned by subqueries with proper filters.
+- For frequently reused or expensive subqueries, store results temporarily.
+- Always verify execution plans with EXPLAIN or EXPLAIN ANALYZE to ensure that optimizations have the intended effect.
+
 ## Selective Projection
 
 ## General Tips
