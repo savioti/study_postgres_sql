@@ -200,6 +200,91 @@ JOIN high_value_orders h ON u.id = h.user_id;
 
 ## Selective Projection
 
+Selective projection in SQL refers to the practice of retrieving only the specific columns required by a query, instead of fetching all available columns.
+
+This technique improves query performance, reduces memory usage, and minimizes the amount of data transferred between the database and the application.
+
+By avoiding SELECT * and explicitly naming only the necessary columns, queries become faster, clearer, and easier to maintain — especially when working with large tables or complex joins.
+
+### Avoid using SELECT *
+
+Using ```SELECT *``` returns all columns from a table or join result, including data that may not be needed.
+This leads to increased I/O, network traffic, and processing time, particularly when the table has many columns or large text and binary fields.
+
+```sql
+-- Inefficient: returns all columns, even unused ones
+SELECT *
+FROM customers
+WHERE city = 'New York';
+```
+
+Instead, explicitly request only the columns you need:
+
+```sql
+-- Optimized: retrieves only relevant columns
+SELECT id, name, email
+FROM customers
+WHERE city = 'New York';
+```
+
+This reduces the amount of data read and transmitted, resulting in faster query execution.
+
+### Benefits in joins and aggregations
+
+When joining multiple tables or performing aggregate operations, selective projection helps the database engine process fewer columns, minimizing memory and CPU usage.
+
+```sql
+-- Inefficient: unnecessary columns from both tables
+SELECT *
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed';
+```
+
+Optimized example:
+
+```sql
+-- Optimized: selects only the columns required for the output
+SELECT u.username, o.order_date, o.total
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed';
+```
+
+By reducing the number of columns handled during the join, the database engine performs fewer data lookups and transfers, which improves execution time.
+
+### Impact on application performance
+
+Fetching unnecessary columns not only affects the database but also the application layer.
+
+Every extra column increases the size of result sets sent over the network, impacting API response times and consuming additional memory in the application.
+
+For example, an ORM query that retrieves entire entities when only a few fields are needed can significantly slow down data-intensive applications.
+Selective projection ensures that only essential data is fetched, improving both backend and frontend efficiency.
+
+### Maintaining query clarity
+
+Explicitly naming columns in queries also enhances readability and maintainability.
+
+Developers can easily understand what data is being used, which reduces errors during schema changes and code refactoring.
+
+```sql
+-- Clearer and safer query
+SELECT id, username, created_at
+FROM users
+WHERE active = true;
+```
+
+This practice prevents unintended behavior if new columns are added to the table later — something that can silently affect queries using SELECT *.
+
+### Selective Projection summary & best practices
+
+- Always list the columns you need instead of using SELECT *.
+- Use selective projection in joins and aggregates to reduce workload and memory usage.
+- Fetch only the data necessary for the application — it improves both query speed and network performance.
+- Keep queries clear and explicit for better maintainability.
+- Revisit ORM configurations or stored procedures that implicitly use SELECT * and refactor them for selective projection.
+
 ## General Tips
 
 ### Avoid SELECT *
